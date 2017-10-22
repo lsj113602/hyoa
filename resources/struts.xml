@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 配置Struts2常量 -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.action.extension" value="jspx,action,do"/>
+    <!-- 配置全局的国际化资源文件 -->
+    <constant name="struts.custom.i18n.resources" value="oa_messages"/>
+
+    <package name="hyoa" namespace="/" extends="json-default">
+
+		<!-- 全局结果配置 -->
+        <global-results>
+            <result name="error">/error.jsp</result>
+        </global-results>
+        
+		<!-- 全局异常配置 -->
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+        
+        <!-- 图形验证码 -->
+        <action name="verify" class="cn.hnhy.hyoa.core.action.VerifyAction"/>
+        
+        <!-- 异步发送验证码 -->
+        <action name="sendSMSAjax" class="cn.hnhy.hyoa.core.action.SmsVerifyAction">
+        	<result type="json">
+        		<param name="root">smsSuccess</param>
+        	</result>
+        </action>
+        
+        <!-- 生成二维码 -->
+        <action name="barcode" class="cn.hnhy.hyoa.core.action.BarcodeAction"/>
+        
+        
+        <!-- 表单异步上传(有文件) -->
+        <action name="asyncUpload" class="cn.hnhy.hyoa.admin.AynscUploadAction"></action>
+    </package>
+    
+    <!-- 引入Struts2子系统级别的配置文件 -->
+    <include file="cn/hnhy/hyoa/admin/struts-admin.xml"/>
+    
+</struts>

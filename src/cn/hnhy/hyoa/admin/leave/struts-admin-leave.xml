@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="admin-leave" namespace="/admin/leave" extends="admin">
+		
+		<!-- 分页查询用户的请假单 -->
+		<action name="selectUserLeave" class="cn.hnhy.hyoa.admin.leave.action.LeaveItemAction"	method="selectUserLeave">
+			<result>/WEB-INF/jsp/admin/leave/userLeave.jsp</result>
+		</action>	
+		
+		<!-- 异步加载假期类型 -->
+		<action name="loadLeaveTypeAjax" class="cn.hnhy.hyoa.admin.leave.action.LeaveAjax" method="loadLeaveTypeAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<param name="root">responseData</param>
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+		
+		<!-- 跳转到填写请假单的页面 -->
+		<action name="showAddLeaveItem">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/leave/addLeaveItem.jsp</result>
+		</action>
+		
+		<!-- 异步加载假期类型 与 流程定义  -->
+		<action name="loadLeaveTypeAndProcessAjax" class="cn.hnhy.hyoa.admin.leave.action.LeaveAjax" method="loadLeaveTypeAndProcessAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<param name="root">responseLists</param>
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+		
+		<!-- 用户填写请假单 -->
+		<action name="addLeaveItem" class="cn.hnhy.hyoa.admin.leave.action.LeaveItemAction" method="addLeaveItem">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/leave/addLeaveItem.jsp</result>
+			<result name="input">/WEB-INF/jsp/admin/leave/addLeaveItem.jsp</result>
+			<result name="invalid.token">/WEB-INF/jsp/admin/leave/addLeaveItem.jsp</result>
+		</action>
+		
+		<!-- 查询当前登录用户需要审批的假期 -->
+		<action name="selectAuditLeave" class="cn.hnhy.hyoa.admin.leave.action.LeaveItemAction" method="selectAuditLeave">
+			<result>/WEB-INF/jsp/admin/leave/auditLeave.jsp</result>
+		</action>
+		
+		<!-- 跳转到审批假期的页面 -->
+		<action name="showAudit" class="cn.hnhy.hyoa.admin.leave.action.LeaveItemAction" method="showAudit">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/leave/audit.jsp</result>
+		</action>
+		
+		<!-- 审批假期 -->
+		<action name="audit" class="cn.hnhy.hyoa.admin.leave.action.LeaveAuditAction" method="audit">
+			<result>/WEB-INF/jsp/admin/leave/audit.jsp</result>
+		</action>
+		
+		<!-- 查询审批意见 -->
+		<action name="selectAuditResult" class="cn.hnhy.hyoa.admin.leave.action.LeaveAuditAction" method="selectAuditResult">
+			<result>/WEB-INF/jsp/admin/leave/auditResult.jsp</result>
+		</action>
+		
+    </package>
+    
+</struts>
+

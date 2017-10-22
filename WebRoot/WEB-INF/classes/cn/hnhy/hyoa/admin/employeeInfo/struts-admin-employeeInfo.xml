@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="admin-employeeInfo" namespace="/admin/employeeInfo" extends="admin">
+		
+		<!-- ######################## 员工管理  ##################### -->
+		<!-- 分页查询员工信息 -->
+		<action name="selectEmployee" class="cn.hnhy.hyoa.admin.employeeInfo.action.EmployeeAction" method="selectEmployee">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/employee.jsp</result>		
+		</action>
+		<!-- 跳转到添加员工页面 -->
+		<action name="showAddEmployee">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/addEmployee.jsp</result>
+		</action>
+		<!-- 添加员工 -->
+		<action name="addEmployee" class="cn.hnhy.hyoa.admin.employeeInfo.action.EmployeeAction" method="addEmployee">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- addEmployee方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/employeeInfo/addEmployee.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/employeeInfo/addEmployee.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/employeeInfo/addEmployee.jsp</result>
+		</action>
+		
+		<!-- 跳转到修改员工页面 -->
+		<action name="showUpdateEmployee" class="cn.hnhy.hyoa.admin.employeeInfo.action.EmployeeAction" method="showUpdateEmployee">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/updateEmployee.jsp</result>
+		</action>
+		<!-- 修改员工 -->
+		<action name="updateEmployee" class="cn.hnhy.hyoa.admin.employeeInfo.action.EmployeeAction" method="updateEmployee">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- updateUser方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/employeeInfo/updateEmployee.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/employeeInfo/updateEmployee.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/employeeInfo/updateEmployee.jsp</result>
+		</action>
+		<!-- 批量删除员工 -->
+		<action name="deleteEmployee" class="cn.hnhy.hyoa.admin.employeeInfo.action.EmployeeAction" method="deleteEmployee">
+			<result type="chain">selectEmployee</result>
+		</action>
+		
+		<!-- ######################## 职位管理 ##################### -->
+		<!-- 分页查询员工信息 -->
+		<action name="selectJob" class="cn.hnhy.hyoa.admin.employeeInfo.action.JobAction" method="selectJob">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/job.jsp</result>		
+		</action>
+		<!-- 跳转到添加职位页面 -->
+		<action name="showAddJob">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/addJob.jsp</result>
+		</action>
+		<!-- 添加职位 -->
+		<action name="addJob" class="cn.hnhy.hyoa.admin.employeeInfo.action.JobAction" method="addJob">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- addEmployee方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/employeeInfo/addJob.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/employeeInfo/addJob.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/employeeInfo/addJob.jsp</result>
+		</action>
+		<!-- 跳转到修改职位页面 -->
+		<action name="showUpdateJob" class="cn.hnhy.hyoa.admin.employeeInfo.action.JobAction" method="showUpdateJob">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/updateJob.jsp</result>
+		</action>
+		<!-- 修改职位 -->
+		<action name="updateJob" class="cn.hnhy.hyoa.admin.employeeInfo.action.JobAction" method="updateJob">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- updateUser方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/employeeInfo/updateJob.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/employeeInfo/updateJob.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/employeeInfo/updateJob.jsp</result>
+		</action>
+		<!-- 批量删除职位 -->
+		<action name="deleteJob" class="cn.hnhy.hyoa.admin.employeeInfo.action.JobAction" method="deleteJob">
+			<result type="chain">selectJob</result>
+		</action>
+		<!-- ######################## 部门管理 ##################### -->
+		<!-- 分页查询部门信息 -->
+		<action name="selectDept" class="cn.hnhy.hyoa.admin.employeeInfo.action.DeptAction" method="selectDept">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/dept.jsp</result>		
+		</action>
+		<!-- 跳转到添加部门页面 -->
+		<action name="showAddDept">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/addDept.jsp</result>
+		</action>
+		<!-- 添加部门 -->
+		<action name="addDept" class="cn.hnhy.hyoa.admin.employeeInfo.action.DeptAction" method="addDept">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- addEmployee方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/employeeInfo/addDept.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/employeeInfo/addDept.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/employeeInfo/addDept.jsp</result>
+		</action>
+		<!-- 跳转到修改部门页面 -->
+		<action name="showUpdateDept" class="cn.hnhy.hyoa.admin.employeeInfo.action.DeptAction" method="showUpdateDept">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/employeeInfo/updateDept.jsp</result>
+		</action>
+		<!-- 修改部门 -->
+		<action name="updateDept" class="cn.hnhy.hyoa.admin.employeeInfo.action.DeptAction" method="updateDept">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- updateUser方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/employeeInfo/updateDept.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/employeeInfo/updateDept.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/employeeInfo/updateDept.jsp</result>
+		</action>
+		<!-- 批量删除部门 -->
+		<action name="deleteDept" class="cn.hnhy.hyoa.admin.employeeInfo.action.DeptAction" method="deleteDept">
+			<result type="chain">selectDept</result>
+		</action>
+    </package>
+    
+</struts>

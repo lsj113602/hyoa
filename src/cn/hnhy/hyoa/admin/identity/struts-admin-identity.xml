@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="admin-identity" namespace="/admin/identity" extends="admin">
+		
+		
+		<!-- ########################### 用户管理  ################################ -->
+		<!-- 多条件分页查询用户 -->
+		<action name="selectUser" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="selectUser">
+			<result>/WEB-INF/jsp/admin/identity/user.jsp</result>
+		</action>
+		
+		<!-- 异步加载部门 -->
+		<action name="loadDeptAjax" class="cn.hnhy.hyoa.admin.identity.action.IdentityAjax" method="loadDeptAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<!-- 指定由哪个get方法返回响应数据 -->
+				<param name="root">responseData</param>
+			</result>
+		</action>
+		
+		<!-- 异步加载用户姓名 -->
+		<action name="loadNameAjax" class="cn.hnhy.hyoa.admin.identity.action.IdentityAjax" method="loadNameAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<!-- 指定由哪个get方法返回响应数据 -->
+				<param name="root">nameData</param>
+			</result>
+		</action>
+		
+		<!-- 跳转到添加用户页面 -->
+		<action name="showAddUser">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/addUser.jsp</result>
+		</action>
+		
+		<!-- 异步加载部门与职位 -->
+		<action name="loadDeptAndJobAjax" class="cn.hnhy.hyoa.admin.identity.action.IdentityAjax" method="loadDeptAndJobAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<!-- 指定由哪个get方法返回响应数据 -->
+				<param name="root">deptJobResponseData</param>
+			</result>
+		</action>
+		
+		<!-- 异步验证用户名是否重复 -->
+		<action name="validUserIdAjax" class="cn.hnhy.hyoa.admin.identity.action.IdentityAjax" method="validUserIdAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<!-- 指定由哪个get方法返回响应数据 -->
+				<param name="root">userIdExistData</param>
+			</result>
+		</action>
+		
+		<!-- 添加用户 -->
+		<action name="addUser" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="addUser">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- addUser方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/identity/addUser.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/identity/addUser.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/identity/addUser.jsp</result>
+		</action>
+		
+		<!-- 跳转到修改用户页面 -->
+		<action name="showUpdateUser" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="showUpdateUser">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/updateUser.jsp</result>
+		</action>
+		
+		<!-- 修改用户 -->
+		<action name="updateUser" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="updateUser">
+			<interceptor-ref name="popedomStack"/>
+			<!-- 添加防表单重复提交拦截器 -->
+			<interceptor-ref name="token"/>
+			<!-- updateUser方法的返回值 -->
+			<result>/WEB-INF/jsp/admin/identity/updateUser.jsp</result>
+			<!-- 表单重复提交时需要的找得视图 -->
+			<result name="invalid.token">/WEB-INF/jsp/admin/identity/updateUser.jsp</result>
+			<!-- 后台validation.xml校验失败时，会找得视图-->
+			<result name="input">/WEB-INF/jsp/admin/identity/updateUser.jsp</result>
+		</action>
+		
+		<!-- 批量删除用户 -->
+		<action name="deleteUser" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="deleteUser">
+			<result type="chain">selectUser</result>
+		</action>
+		
+		<!-- 批量审核用户 -->
+		<action name="checkUser" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="checkUser">
+			<result type="chain">selectUser</result>
+		</action>
+		
+		
+		
+		<!-- ########################### 角色管理  ################################ -->
+		<!-- 分页查询角色 -->
+		<action name="selectRole" class="cn.hnhy.hyoa.admin.identity.action.RoleAction" method="selectRole">
+			<result>/WEB-INF/jsp/admin/identity/role.jsp</result>
+		</action>
+		<!-- 跳转到添加角色的页面 -->
+		<action name="showAddRole">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/addRole.jsp</result>
+		</action>
+		
+		<!-- 添加角色 -->
+		<action name="addRole" class="cn.hnhy.hyoa.admin.identity.action.RoleAction" method="addRole">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/identity/addRole.jsp</result>
+			<result name="invalid.token">/WEB-INF/jsp/admin/identity/addRole.jsp</result>
+			<result name="input">/WEB-INF/jsp/admin/identity/addRole.jsp</result>
+		</action>
+		
+		<!-- 跳转到修改角色的页面 -->
+		<action name="showUpdateRole" class="cn.hnhy.hyoa.admin.identity.action.RoleAction" method="showUpdateRole">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/updateRole.jsp</result>
+		</action>
+		
+		<!-- 修改角色 -->
+		<action name="updateRole" class="cn.hnhy.hyoa.admin.identity.action.RoleAction" method="updateRole">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/identity/updateRole.jsp</result>
+			<result name="invalid.token">/WEB-INF/jsp/admin/identity/updateRole.jsp</result>
+			<result name="input">/WEB-INF/jsp/admin/identity/updateRole.jsp</result>
+		</action>
+		
+		<!-- 批量删除角色 -->
+		<action name="deleteRole" class="cn.hnhy.hyoa.admin.identity.action.RoleAction" method="deleteRole">
+			<result type="chain">selectRole</result>
+		</action>
+		
+		<!-- ########################### 操作管理  ################################ -->
+		<!-- 跳转到管理操作页面 -->
+		<action name="mgrModule">
+			<result>/WEB-INF/jsp/admin/identity/moduleMain.jsp</result>
+		</action>
+		<!-- 左边子窗口 -->
+		<action name="moduleLeft">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/moduleLeft.jsp</result>
+		</action>
+		<!-- 右边子窗口 -->
+		<action name="selectModule" class="cn.hnhy.hyoa.admin.identity.action.ModuleAction" method="selectModule">
+			<result>/WEB-INF/jsp/admin/identity/module.jsp</result>
+		</action>
+		<!-- 异步加载操作树 -->
+		<action name="loadModuleTreeAjax" class="cn.hnhy.hyoa.admin.identity.action.IdentityAjax" method="loadModuleTreeAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<!-- 配置调用哪个get方法返回响应数据 -->
+				<param name="root">responseData</param>
+				<!-- 配置对响应数据进行GZIP压缩，提升服务器响应速度 -->
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+		
+		<!-- 跳转到添加操作的页面 -->
+		<action name="showAddModule" class="cn.hnhy.hyoa.admin.identity.action.ModuleAction">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/addModule.jsp</result>
+		</action>
+		
+		<!-- 添加操作 -->
+		<action name="addModule" class="cn.hnhy.hyoa.admin.identity.action.ModuleAction" method="addModule">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/identity/addModule.jsp</result>
+			<result name="invalid.token">/WEB-INF/jsp/admin/identity/addModule.jsp</result>
+			<result name="input">/WEB-INF/jsp/admin/identity/addModule.jsp</result>
+		</action>
+		
+		<!-- 跳转到修改操作的页面 -->
+		<action name="showUpdateModule" class="cn.hnhy.hyoa.admin.identity.action.ModuleAction" method="showUpdateModule">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/updateModule.jsp</result>
+		</action>
+		
+		<!-- 修改操作 -->
+		<action name="updateModule" class="cn.hnhy.hyoa.admin.identity.action.ModuleAction" method="updateModule">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/identity/updateModule.jsp</result>
+			<result name="invalid.token">/WEB-INF/jsp/admin/identity/updateModule.jsp</result>
+			<result name="input">/WEB-INF/jsp/admin/identity/updateModule.jsp</result>
+		</action>
+		
+		<!-- 删除操作 -->
+		<action name="deleteModule" class="cn.hnhy.hyoa.admin.identity.action.ModuleAction" method="deleteModule">
+			<result type="chain">selectModule</result>
+		</action>
+		
+		
+		<!-- ########################### 角色绑定管理  ################################ -->
+		<!-- 根据角色id分页查询用户(把这个角色中已经绑定的用户查询出来) -->
+		<action name="selectRoleUser" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction" method="selectRoleUser">
+			<result>/WEB-INF/jsp/admin/identity/roleUser.jsp</result>
+		</action>
+		
+		<!-- 根据角色id分页查询用户(把这个角色中没有绑定的用户查询出来) -->
+		<action name="showBindUser" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction" method="showBindUser">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/bindUser.jsp</result>
+		</action>
+		
+		<!-- 角色绑定用户 -->
+		<action name="bindUser" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction" method="bindUser">
+			<result type="chain">showBindUser</result>
+		</action>
+		
+		<!-- 角色解除用户 -->
+		<action name="unBindUser" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction" method="unBindUser">
+			<result type="chain">selectRoleUser</result>
+		</action>
+		
+		<!-- 跳转到角色绑定操作的页面 -->
+		<action name="mgrPopedom" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction">
+			<result>/WEB-INF/jsp/admin/identity/popedomMain.jsp</result>
+		</action>
+		<!-- 左边窗口 -->
+		<action name="popedomLeft" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/identity/popedomLeft.jsp</result>
+		</action>
+		<!-- 异步加载权限树 -->
+		<action name="loadPopedomTreeAjax" class="cn.hnhy.hyoa.admin.identity.action.IdentityAjax" method="loadPopedomTreeAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<param name="root">responseData</param>
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+		
+		<!-- 查询12位的操作  -->
+		<action name="selectPopedom" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction" method="selectPopedom">
+			<result>/WEB-INF/jsp/admin/identity/popedom.jsp</result>
+		</action>
+		
+		<!-- 角色绑定操作(把操作转化成权限) -->
+		<action name="bindModule" class="cn.hnhy.hyoa.admin.identity.action.RoleBindAction" method="bindModule">
+			<result type="chain">selectPopedom</result>
+		</action>
+		
+    </package>
+    
+</struts>

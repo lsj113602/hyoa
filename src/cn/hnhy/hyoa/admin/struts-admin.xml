@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="admin" namespace="/admin" extends="hyoa">
+    	<!-- 配置拦截器 -->
+    	<interceptors>
+    		<!-- 配置登录拦截器 -->
+    		<interceptor name="loginInterceptor" class="cn.hnhy.hyoa.admin.interceptor.LoginInterceptor"/>
+    		<!-- 配置权限拦截器 -->
+    		<interceptor name="popedomInterceptor" class="cn.hnhy.hyoa.admin.interceptor.PopedomInterceptor"/>
+    		<!-- 配置登录拦截器栈 -->
+    		<interceptor-stack name="loginStack">
+    			<interceptor-ref name="defaultStack"/>
+    			<interceptor-ref name="loginInterceptor"/>
+    		</interceptor-stack>
+    		<!-- 配置权限拦截器栈 -->
+    		<interceptor-stack name="popedomStack">
+    			<interceptor-ref name="loginStack"/>
+    			<interceptor-ref name="popedomInterceptor"/>
+    		</interceptor-stack>
+    	</interceptors>
+    	
+    	<!-- 配置默认的拦截器引用(使用拦截器栈)  -->
+    	<default-interceptor-ref name="popedomStack"/>
+
+		<!-- 全局结果配置 -->
+        <global-results>
+            <result name="error">/error.jsp</result>
+            <result name="login">/WEB-INF/jsp/admin/login.jsp</result>
+        </global-results>
+        
+        <!-- 配置该命名空间下全局的Action main head ActionSupport -->
+        <action name="*">
+        	<interceptor-ref name="loginStack"/>
+        	<result>/WEB-INF/jsp/admin/{1}.jsp</result>
+        </action>
+        
+        <!-- 异步请求登录 -->
+        <action name="loginAjax" class="cn.hnhy.hyoa.admin.LoginAjax">
+        	<!-- 配置了自己的拦截器，全局的拦截器引用就会失效 -->
+        	<interceptor-ref name="defaultStack"/>
+        	<!-- 指定响应数据的类型为json -->
+        	<result type="json">
+        		<!-- JSONResult类中setRoot方法来指定 调用当前Action的哪个get方法返回响应数据
+        			getResponseData()
+        		 -->
+        		<param name="root">responseData</param>
+        	</result>
+        </action>
+        
+        <!-- 异步根据当前登录用户生成功能菜单树 -->
+        <action name="loadMenuTreeAjax" class="cn.hnhy.hyoa.admin.LoadMenuTreeAjax">
+        	<interceptor-ref name="loginStack"/>
+        	<!-- 指定响应数据的类型为json -->
+        	<result type="json">
+        		<!-- JSONResult类中setRoot方法来指定 调用当前Action的哪个get方法返回响应数据
+        			getResponseData()
+        		 -->
+        		<param name="root">responseData</param>
+        		<param name="enableGZIP">true</param>
+        	</result>
+        </action>
+        
+        <!-- 安全退出 -->
+        <action name="adminLogout" class="cn.hnhy.hyoa.admin.AdminLogoutAction">
+        	<interceptor-ref name="loginStack"/>
+        </action>
+        
+        <!-- 跳转到找回密码的页面 -->
+        <action name="showFindpwd">
+        	<interceptor-ref name="defaultStack"/>
+        	<result>/WEB-INF/jsp/admin/findpwd.jsp</result>
+        </action>
+        
+        <!-- 找回密码 -->
+        <action name="findPwd" class="cn.hnhy.hyoa.admin.FindPwdAction">
+        	<interceptor-ref name="defaultStack"/>
+        	<result>/WEB-INF/jsp/admin/findpwd.jsp</result>
+        </action>
+        
+        
+        <!-- 修改密码 -->
+        <action name="updatePwd" class="cn.hnhy.hyoa.admin.UpdatePwdAction">
+        	<interceptor-ref name="loginStack"/>
+        	<interceptor-ref name="token"/>
+        	<result type="redirectAction">adminLogout</result>
+        	<result name="invalid.token">/WEB-INF/jsp/admin/password.jsp</result>
+        	<result name="input">/WEB-INF/jsp/admin/password.jsp</result>
+        </action>
+        
+        <!-- 修改用户自己的信息 -->
+        <action name="updateSelf" class="cn.hnhy.hyoa.admin.identity.action.UserAction" method="updateUser">
+        	<interceptor-ref name="loginStack"/>
+        	<interceptor-ref name="token"/>
+        	<result>/WEB-INF/jsp/admin/self.jsp</result>
+        	<result name="invalid.token">/WEB-INF/jsp/admin/self.jsp</result>
+        	<result name="input">/WEB-INF/jsp/admin/self.jsp</result>
+        </action>
+        
+		
+    </package>
+    
+    <!-- 引用Struts2模块级别的配置文件 -->
+    <include file="cn/hnhy/hyoa/admin/addressbook/struts-admin-addressbook.xml"/>
+    <include file="cn/hnhy/hyoa/admin/identity/struts-admin-identity.xml"/>
+    <include file="cn/hnhy/hyoa/admin/leave/struts-admin-leave.xml"/>
+    <include file="cn/hnhy/hyoa/admin/workflow/struts-admin-workflow.xml"/>
+    <include file="cn/hnhy/hyoa/admin/employeeInfo/struts-admin-employeeInfo.xml"/>    
+</struts>

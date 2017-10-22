@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        			    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        			    http://www.springframework.org/schema/context
+        			    http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        			    http://www.springframework.org/schema/tx
+        			    http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        			    http://www.springframework.org/schema/aop
+        			    http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        			    http://www.springframework.org/schema/util
+        			    http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+        			    
+      <!-- 配置加载属性文件 -->
+      <context:property-placeholder location="classpath:jdbc.properties"/>
+      
+      <!-- 开启注解实现Field注入  @Resource @Autowired-->
+      <context:annotation-config/>
+      
+      <!-- 配置数据源(c3p0) -->
+	  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"
+	  	  p:driverClass="${c3p0.driverClass}"
+	  	  p:jdbcUrl="${c3p0.jdbcUrl}"
+	  	  p:user="${c3p0.user}"
+	  	  p:password="${c3p0.password}"
+	  	  p:minPoolSize="${c3p0.minPoolSize}"
+	  	  p:maxPoolSize="${c3p0.maxPoolSize}"
+	  	  p:initialPoolSize="${c3p0.initialPoolSize}"/>
+	  	  
+      <!-- 配置SessionFactory -->
+      <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+      	  p:dataSource-ref="dataSource"
+      	  p:configLocation="classpath:hibernate.cfg.xml">
+      	  <!-- 配置持久化类采用包扫描方式 -->
+      	  <property name="packagesToScan">
+      	  	  <array>
+      	  	  	 <value>cn.hnhy.hyoa.admin.identity.entity</value>
+      	  	  	 <value>cn.hnhy.hyoa.admin.addressbook.entity</value>
+      	  	  	 <value>cn.hnhy.hyoa.admin.leave.entity</value>
+      	  	  </array>
+      	  </property>
+      </bean>
+
+      <!-- 配置事务管理器TransactionManager -->
+      <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"
+      	  p:sessionFactory-ref="sessionFactory"/>
+
+      <!-- 用tx做声明式事务配置 -->
+	  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+	  	  <!-- 事务属性配置 -->
+	  	  <tx:attributes>
+	  	  	  <!-- set方法开头的，只能做查询  (read-only=true) 没有开启事务 -->
+	  	  	  <tx:method name="set*" read-only="true"/>
+	  	  	  <!-- get方法开头的，只能做查询  (read-only=true) 没有开启事务 -->
+	  	  	  <tx:method name="get*" read-only="true"/>
+	  	  	  <!-- 剩余的方法，CRUD都可以做  (read-only=false) 开启事务 -->
+	  	  	  <tx:method name="*" read-only="false" rollback-for="java.lang.RuntimeException"/>
+	  	  </tx:attributes>
+	  </tx:advice>
+	  
+	  
+	  <!-- 配置日志Bean -->
+	  <bean id="logAdvice" class="cn.hnhy.hyoa.core.aop.LogAdvice"/>
+	  
+      <!-- 配置aop切面 -->
+      <aop:config>
+      
+      	  <!-- 配置切入点表达式(指定切哪些类中的哪些方法) -->
+      	  <aop:pointcut expression="execution(* cn.hnhy.hyoa.*.*.service.*.*.*(..))" id="pointcut"/>
+      	  
+      	  <!-- 把上面的声明式事务配置 txAdvice 运用到指定切入点 pointcut (事务切面配置)  -->
+      	  <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+      	  
+      	  <!-- 日志切面配置  aop:aspect把普通的Bean转换成切面Bean-->
+      	  <aop:aspect ref="logAdvice">
+      	  	   <!-- 在目标方法前后都切入(织入) -->
+      	  	   <aop:around method="around" pointcut-ref="pointcut"/>
+      	  	   <!-- 在目标方法出现异常后切入 -->
+      	  	   <aop:after-throwing method="error" pointcut-ref="pointcut" throwing="ex"/>
+      	  </aop:aspect>
+      	  
+      	  
+      </aop:config>
+      
+      <!-- ##################### Spring集成javamail ########################## -->
+      <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"
+      	  p:defaultEncoding="utf-8"
+      	  p:host="smtp.163.com"
+      	  p:username="fkjava8888"
+      	  p:password="fkjava888">
+      	  <property name="javaMailProperties">
+      	  		<props>
+      	  			<prop key="mail.smtp.auth">true</prop>
+      	  		</props>
+      	  </property>
+      </bean>
+      <bean id="emailSender" class="cn.hnhy.hyoa.core.common.email.impl.EmailSenderImpl"
+      		p:from="fkjava8888@163.com"
+      		p:javaMailSender-ref="javaMailSender"/>
+      
+</beans>

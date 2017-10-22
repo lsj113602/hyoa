@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        			    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        			    http://www.springframework.org/schema/context
+        			    http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        			    http://www.springframework.org/schema/tx
+        			    http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        			    http://www.springframework.org/schema/aop
+        			    http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        			    http://www.springframework.org/schema/util
+        			    http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+        			    
+      <!-- ###################### 通讯录管理处理Bean ################### -->
+      <bean id="addressbookService" class="cn.hnhy.hyoa.admin.addressbook.service.impl.AddressbookServiceImpl"/>
+      
+      <!-- ###################### 权限管理处理Bean ################### -->
+      <bean id="identityService" class="cn.hnhy.hyoa.admin.identity.service.impl.IdentityServiceImpl"/>
+      
+      <!-- ###################### 假期管理处理Bean ################### -->
+      <bean id="leaveService" class="cn.hnhy.hyoa.admin.leave.service.impl.LeaveServiceImpl"/>
+      
+       <!-- ###################### 工作流管理处理Bean ################### -->
+      <bean id="workflowService" class="cn.hnhy.hyoa.admin.workflow.service.impl.WorkflowServiceImpl"/>
+      
+      <!-- ###################### 人事管理处理Bean ################### -->
+      <bean id="EmployeeInfoService" class="cn.hnhy.hyoa.admin.employeeInfo.service.impl.EmployeeInfoServiceImpl"/>
+      
+</beans>

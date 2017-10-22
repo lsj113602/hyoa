@@ -1,0 +1,57 @@
+<ehcache>
+
+    <!-- Sets the path to the directory where cache .data files are created.
+
+         If the path is a Java System Property it is replaced by
+         its value in the running VM.
+
+         The following properties are translated:
+         user.home - User's home directory
+         user.dir - User's current working directory
+         java.io.tmpdir - Default temp file path 
+                  配置二级缓存中的对象磁盘存储目录
+         -->
+    <diskStore path="F:\cache"/>
+
+
+    <!--Default Cache configuration. These will applied to caches programmatically created through
+        the CacheManager.
+
+        The following attributes are required for defaultCache:
+
+        maxInMemory       - Sets the maximum number of objects that will be created in memory
+        eternal           - Sets whether elements are eternal. If eternal,  timeouts are ignored and the element
+                            is never expired.
+        timeToIdleSeconds - Sets the time to idle for an element before it expires. Is only used
+                            if the element is not eternal. Idle time is now - last accessed time
+        timeToLiveSeconds - Sets the time to live for an element before it expires. Is only used
+                            if the element is not eternal. TTL is now - creation time
+        overflowToDisk    - Sets whether elements can overflow to disk when the in-memory cache
+                            has reached the maxInMemory limit.
+                   配置默认的缓存区:
+         maxElementsInMemory : 配置二级缓存中的对象在内存中存放的最大数量          
+         eternal : 配置二级缓存中的对象是否永久有效. false不是   true:是
+         timeToIdleSeconds:  配置二级缓存中的对象最大空闲时间  120(按秒)
+         timeToLiveSeconds: 配置二级缓存中的对象存活的最大时间 120(按秒)
+         overflowToDisk:  配置二级缓存中的对象超出了内存中存放的最大数量就写入磁盘
+        -->
+    <defaultCache
+        maxElementsInMemory="10000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"
+        />
+
+    <!--  配置命名的缓存区 -->
+    <cache name="itCache"
+        maxElementsInMemory="10000"
+        eternal="false"
+        timeToIdleSeconds="300"
+        timeToLiveSeconds="600"
+        overflowToDisk="true"
+        />
+
+    
+
+</ehcache>

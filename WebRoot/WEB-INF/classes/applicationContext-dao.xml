@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        			    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        			    http://www.springframework.org/schema/context
+        			    http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        			    http://www.springframework.org/schema/tx
+        			    http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        			    http://www.springframework.org/schema/aop
+        			    http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        			    http://www.springframework.org/schema/util
+        			    http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+        		
+      <!-- ################## 主键生成器数据访问Bean ######################  --> 			    
+      <bean id="generatorDao" class="cn.hnhy.hyoa.core.dao.impl.GeneratorDaoImpl"/>
+        	    
+      <!-- ################## 权限管理模块数据访问Bean ######################  -->
+      <bean id="deptDao" class="cn.hnhy.hyoa.admin.identity.dao.impl.DeptDaoImpl"/>
+      <bean id="jobDao" class="cn.hnhy.hyoa.admin.identity.dao.impl.JobDaoImpl"/>
+      <bean id="moduleDao" class="cn.hnhy.hyoa.admin.identity.dao.impl.ModuleDaoImpl"/>
+      <bean id="popedomDao" class="cn.hnhy.hyoa.admin.identity.dao.impl.PopedomDaoImpl"/>
+      <bean id="roleDao" class="cn.hnhy.hyoa.admin.identity.dao.impl.RoleDaoImpl"/>
+      <bean id="userDao" class="cn.hnhy.hyoa.admin.identity.dao.impl.UserDaoImpl"/>
+      
+      
+      <!-- ################## 通讯录管理模块数据访问Bean ######################  -->
+      <bean id="contactDao" class="cn.hnhy.hyoa.admin.addressbook.dao.impl.ContactDaoImpl"/>
+      <bean id="contactGroupDao" class="cn.hnhy.hyoa.admin.addressbook.dao.impl.ContactGroupDaoImpl"/>
+      
+      
+      <!-- ################## 假期管理模块数据访问Bean ######################  -->
+      <bean id="leaveTypeDao" class="cn.hnhy.hyoa.admin.leave.dao.impl.LeaveTypeDaoImpl"/>
+      <bean id="leaveItemDao" class="cn.hnhy.hyoa.admin.leave.dao.impl.LeaveItemDaoImpl"/>
+      <bean id="leaveAuditDao" class="cn.hnhy.hyoa.admin.leave.dao.impl.LeaveAuditDaoImpl"/>
+      
+       <!-- ################## 假期管理模块数据访问Bean ######################  -->
+      <bean id="employeeDao" class="cn.hnhy.hyoa.admin.employeeInfo.dao.impl.EmployeeDaoImpl"/>
+      
+</beans>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	
+    <package name="admin-addressbook" namespace="/admin/addressbook" extends="admin">
+		
+		<!-- ######################## 联系组管理 ##################### -->
+		<!-- 分页查询联系组 -->
+		<action name="selectContactGroup" class="cn.hnhy.hyoa.admin.addressbook.action.ContactGroupAction" method="selectContactGroup">
+			<result>/WEB-INF/jsp/admin/addressbook/contactGroup.jsp</result>		
+		</action>
+		
+		<!-- 跳转到添加联系组页面 -->
+		<action name="showAddContactGroup">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/addressbook/addContactGroup.jsp</result>		
+		</action>
+		
+		<!-- 添加联系组 -->
+		<action name="addContactGroup" class="cn.hnhy.hyoa.admin.addressbook.action.ContactGroupAction" method="addContactGroup">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/addressbook/addContactGroup.jsp</result>	
+			<result name="invalid.token">/WEB-INF/jsp/admin/addressbook/addContactGroup.jsp</result>	
+			<result name="input">/WEB-INF/jsp/admin/addressbook/addContactGroup.jsp</result>	
+		</action>
+		
+		<!-- 跳转到修改联系组页面 -->
+		<action name="showUpdateContactGroup" class="cn.hnhy.hyoa.admin.addressbook.action.ContactGroupAction" method="showUpdateContactGroup">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/addressbook/updateContactGroup.jsp</result>	
+		</action>
+		
+		<!-- 修改联系组 -->
+		<action name="updateContactGroup" class="cn.hnhy.hyoa.admin.addressbook.action.ContactGroupAction" method="updateContactGroup">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/addressbook/updateContactGroup.jsp</result>	
+			<result name="invalid.token">/WEB-INF/jsp/admin/addressbook/updateContactGroup.jsp</result>	
+			<result name="input">/WEB-INF/jsp/admin/addressbook/updateContactGroup.jsp</result>	
+		</action>
+		
+		<!-- 删除联系组 -->
+		<action name="deleteContactGroup" class="cn.hnhy.hyoa.admin.addressbook.action.ContactGroupAction" method="deleteContactGroup">
+			<result type="chain">selectContactGroup</result>	
+		</action>
+		
+		<!-- ######################## 联系人管理 ##################### -->
+		<!-- 跳转联系人管理主页面 -->
+		<action name="mgrContact">
+			<result>/WEB-INF/jsp/admin/addressbook/contactMain.jsp</result>	
+		</action>
+		<!-- 左边的窗口 -->
+		<action name="contactLeft">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/addressbook/contactLeft.jsp</result>	
+		</action>
+		<!-- 右边的窗口 -->
+		<action name="selectContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="selectContact">
+			<result>/WEB-INF/jsp/admin/addressbook/contact.jsp</result>	
+		</action>
+		<!-- 异步加载联系组生成树 -->
+		<action name="loadContactGroupTreeAjax" class="cn.hnhy.hyoa.admin.addressbook.action.AddressbookAjax" method="loadContactGroupTreeAjax">
+			<interceptor-ref name="loginStack"/>
+			<result type="json">
+				<!-- 指定响应数据的方法 -->
+				<param name="root">responseData</param>
+				<!-- 开启GZIP对响应的数据进行压缩 -->
+				<param name="enableGZIP">true</param>
+			</result>
+		</action>
+		
+		<!-- 跳转到添加联系人页面 -->
+		<action name="showAddContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/addressbook/addContact.jsp</result>	
+		</action>
+		
+		<!-- 添加联系人 -->
+		<action name="addContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="addContact">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/addressbook/addContact.jsp</result>	
+			<result name="invalid.token">/WEB-INF/jsp/admin/addressbook/addContact.jsp</result>	
+			<result name="input">/WEB-INF/jsp/admin/addressbook/addContact.jsp</result>	
+		</action>
+		
+		<!-- 跳转到修改联系人页面 -->
+		<action name="showUpdateContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="showUpdateContact">
+			<interceptor-ref name="loginStack"/>
+			<result>/WEB-INF/jsp/admin/addressbook/updateContact.jsp</result>	
+		</action>
+		
+		<!-- 修改联系人 -->
+		<action name="updateContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="updateContact">
+			<interceptor-ref name="popedomStack"/>
+			<interceptor-ref name="token"/>
+			<result>/WEB-INF/jsp/admin/addressbook/updateContact.jsp</result>	
+			<result name="invalid.token">/WEB-INF/jsp/admin/addressbook/updateContact.jsp</result>	
+			<result name="input">/WEB-INF/jsp/admin/addressbook/updateContact.jsp</result>	
+		</action>
+		
+		<!-- 删除联系人 -->
+		<action name="deleteContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="deleteContact">
+			<result type="chain">selectContact</result>
+		</action>
+		
+		<!-- 联系人信息导出Excel -->
+		<action name="exportContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="exportContact"/>
+		
+		<!-- 联系人信息导入Excel -->
+		<action name="importContact" class="cn.hnhy.hyoa.admin.addressbook.action.ContactAction" method="importContact">
+			<result type="chain">selectContact</result>
+		</action>
+    </package>
+    
+</struts>
